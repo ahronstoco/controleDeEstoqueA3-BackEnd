@@ -9,6 +9,7 @@ import modelo.Categoria;
 import modelo.Tamanho;
 import java.util.ArrayList;
 import java.util.List;
+import util.ConnectionFactory;
 
 public class CategoriaDAO {
 

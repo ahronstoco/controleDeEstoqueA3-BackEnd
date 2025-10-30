@@ -9,6 +9,7 @@ import modelo.Categoria;
 import modelo.GerenciamentoEstoque;
 import java.util.ArrayList;
 import java.util.List;
+import util.ConnectionFactory;
 
 public class ProdutoDAO {
 
