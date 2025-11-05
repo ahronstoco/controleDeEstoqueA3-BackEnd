@@ -1,7 +1,10 @@
 package modelo;
 
-public class Produto extends ItemEstoque {
+import java.io.Serializable;
 
+public class Produto extends ItemEstoque implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String unidade; // Kg, litros, etc.
     private int idProduto; // ID dos produtos.
     private Categoria categoria; // Se referindo a classe Categoria.

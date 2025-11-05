@@ -1,6 +1,10 @@
 package modelo;
 
-public class GerenciamentoEstoque extends ItemEstoque {
+import java.io.Serializable;
+
+public class GerenciamentoEstoque extends ItemEstoque implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int idProduto; // ID dos produtos.
     private String operacao; // Entrada ou saída.
     

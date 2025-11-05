@@ -1,6 +1,9 @@
 package modelo;
 
-public abstract class ItemEstoque {
+import java.io.Serializable;
+
+public abstract class ItemEstoque implements Serializable {
+    private static final long serialVersionUID = 1L;
     
     // Classe superior contendo somente preço e nome.
     
