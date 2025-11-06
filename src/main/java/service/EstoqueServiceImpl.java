@@ -3,8 +3,7 @@ package Service;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
-import java.math.BigDecimal;
-
+import java.lang.String;
 import dao.ProdutoDAO;
 import dao.CategoriaDAO;
 import dao.MovimentacaoDAO;
@@ -27,17 +26,17 @@ public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueSe
     @Override
     public void salvarProduto(Produto p) throws RemoteException {
         if (p.getIdProduto() == null) {
-            produtoDAO.salvar(p);
+            produtoDAO.inserir(p);
             System.out.println("Produto cadastrado: " + p.getNome());
         } else {
-            produtoDAO.atualizar(p);
+            produtoDAO.alterar(p);
             System.out.println("Produto atualizado: " + p.getNome());
         }
     }
 
     @Override
     public List<Produto> listarProdutos() throws RemoteException {
-        return produtoDAO.listarTodos();
+        return produtoDAO.listar();
     }
 
     @Override
@@ -47,24 +46,24 @@ public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueSe
 
     @Override
     public void excluirProduto(int id) throws RemoteException {
-        produtoDAO.excluir(id);
+        produtoDAO.apagar(id);
         System.out.println("Produto removido (ID: " + id + ")");
     }
 
     @Override
     public void salvarCategoria(Categoria c) throws RemoteException {
-        if (c.getIdCategoria() == null) {
-            categoriaDAO.salvar(c);
+        if (c.getIdCategoria() == 0) {
+            categoriaDAO.inserir(c);
             System.out.println("Categoria cadastrada: " + c.getNome());
         } else {
-            categoriaDAO.atualizar(c);
+            categoriaDAO.alterar(c);
             System.out.println("Categoria atualizada: " + c.getNome());
         }
     }
 
     @Override
     public List<Categoria> listarCategorias() throws RemoteException {
-        return categoriaDAO.listarTodos();
+        return categoriaDAO.listar();
     }
 
     @Override
@@ -74,7 +73,7 @@ public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueSe
 
     @Override
     public void excluirCategoria(int id) throws RemoteException {
-        categoriaDAO.excluir(id);
+        categoriaDAO.apagar(id);
         System.out.println("Categoria removida (ID: " + id + ")");
     }
 
@@ -97,7 +96,7 @@ public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueSe
         }
 
         produtoDAO.atualizarEstoque(p.getIdProduto(), novaQtd);
-        movimentacaoDAO.registrar(m);
+        movimentacaoDAO.inserir(m);
 
         System.out.println("Movimentação registrada: " + m.getTipo() + " de " + m.getQuantidade()
                 + " unid(s) do produto " + p.getNome());
@@ -105,17 +104,17 @@ public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueSe
 
     @Override
     public List<Movimentacao> listarMovimentacoesPorProduto(int idProduto) throws RemoteException {
-        return movimentacaoDAO.listarPorProduto(idProduto);
+        return movimentacaoDAO.buscarPorProduto(idProduto);
     }
 
     @Override
     public List<Produto> listarProdutosAbaixoDoMinimo() throws RemoteException {
-        return produtoDAO.listarAbaixoDoMinimo();
+        return produtoDAO.listarFaltaProduto();
     }
 
     @Override
     public List<Produto> listarProdutosAcimaDoMaximo() throws RemoteException {
-        return produtoDAO.listarAcimaDoMaximo();
+        return produtoDAO.listarExcessoProdutos();
     }
 
     @Override
@@ -125,11 +124,11 @@ public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueSe
 
     @Override
     public double calcularValorTotalEstoque() throws RemoteException {
-        List<Produto> produtos = produtoDAO.listarTodos();
+        List<Produto> produtos = produtoDAO.listar();
         double total = 0;
         for (Produto p : produtos) {
-            BigDecimal valor = p.getPrecoUnitario();
-            total += valor.doubleValue() * p.getQuantidadeEstoque();
+            double valor = p.getPrecoUnitario();
+            total += valor * p.getQuantidadeEstoque();
         }
         return total;
     }

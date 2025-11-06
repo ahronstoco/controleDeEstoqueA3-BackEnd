@@ -17,8 +17,7 @@ public class CategoriaDAO {
         String sql = "INSERT INTO categoria(nome, tamanho, embalagem) VALUES (?, ?, ?)";
 
         ConnectionFactory factory = new ConnectionFactory();
-        try (Connection conexao = factory.getConnection();
-                PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, categoria.getNome());
             stmt.setString(2, categoria.getTamanho().name());
@@ -42,8 +41,7 @@ public class CategoriaDAO {
         String sql = "UPDATE categoria SET nome = ?, tamanho = ?, embalagem = ? WHERE idCategoria = ?";
 
         ConnectionFactory factory = new ConnectionFactory();
-        try (Connection conexao = factory.getConnection();
-                PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setString(1, categoria.getNome());
             stmt.setString(2, categoria.getTamanho().name());
@@ -60,8 +58,7 @@ public class CategoriaDAO {
         String sql = "DELETE FROM categoria WHERE idCategoria = ?";
 
         ConnectionFactory factory = new ConnectionFactory();
-        try (Connection conexao = factory.getConnection();
-                PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setInt(1, idCategoria);
             stmt.executeUpdate();
@@ -76,9 +73,7 @@ public class CategoriaDAO {
         String sql = "SELECT * FROM categoria";
 
         ConnectionFactory factory = new ConnectionFactory();
-        try (Connection conexao = factory.getConnection();
-                PreparedStatement stmt = conexao.prepareStatement(sql);
-                ResultSet rs = stmt.executeQuery()) {
+        try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Categoria categoria = new Categoria();
@@ -94,5 +89,33 @@ public class CategoriaDAO {
         }
 
         return lista;
+    }
+
+    public Categoria buscarPorId(int idCategoria) {
+        String sql = "SELECT * FROM categoria WHERE idCategoria = ?";
+
+        ConnectionFactory factory = new ConnectionFactory();
+        try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+            stmt.setInt(1, idCategoria);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Categoria categoria = new Categoria();
+                    categoria.setIdCategoria(rs.getInt("idCategoria"));
+                    categoria.setNome(rs.getString("nome"));
+                    String tamanhoStr = rs.getString("tamanho");
+                    if (tamanhoStr != null && !tamanhoStr.isEmpty()) {
+                        categoria.setTamanho(Tamanho.valueOf(tamanhoStr));
+                    }
+                    categoria.setEmbalagem(rs.getString("embalagem"));
+                    return categoria;
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar categoria por ID: " + e.getMessage());
+        }
+
+        return null;
     }
 }

@@ -38,7 +38,7 @@ public class ProdutoDAO {
 
     public void alterar(Produto produto) {
         String sql = "UPDATE produto SET nome = ?, precoUnitario = ?, unidade = ?, quantidadeEstoque = ?, quantidadeMinima = ?, "
-                + "quantidadeMaxima = ? idProduto = ?, categoria = ? WHERE idProduto = ?";
+                + "quantidadeMaxima = ?, idProduto = ?, categoria = ? WHERE idProduto = ?";
 
         ConnectionFactory factory = new ConnectionFactory();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -60,13 +60,17 @@ public class ProdutoDAO {
         }
     }
 
-    public void apagar(int idProduto) {
+    public void apagar(Integer idProduto) {
         String sql = "DELETE FROM produto WHERE idProduto = ?";
 
         ConnectionFactory factory = new ConnectionFactory();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
-            stmt.setInt(1, idProduto);
+            if (idProduto != null) {
+                stmt.setInt(1, idProduto);
+            } else {
+                stmt.setNull(1, java.sql.Types.INTEGER);
+            }
             stmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -215,13 +219,52 @@ public class ProdutoDAO {
         return listaCategoria;
     }
 
-    public Produto buscarPorId(int idProduto) {
+    public List<Produto> listarPorCategoria(String nomeCategoria) {
+    List<Produto> lista = new ArrayList<>();
+    String sql = "SELECT * FROM produto WHERE categoria = ?";
+
+    ConnectionFactory factory = new ConnectionFactory();
+    try (Connection conexao = factory.getConnection();
+         PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+        stmt.setString(1, nomeCategoria);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            Produto produto = new Produto();
+            produto.setIdProduto(rs.getInt("idProduto"));
+            produto.setNome(rs.getString("nome"));
+            produto.setPrecoUnitario(rs.getDouble("precoUnitario"));
+            produto.setUnidade(rs.getString("unidade"));
+            produto.setQuantidadeEstoque(rs.getInt("quantidadeEstoque"));
+            produto.setQuantidadeMinima(rs.getInt("quantidadeMinima"));
+            produto.setQuantidadeMaxima(rs.getInt("quantidadeMaxima"));
+            
+            Categoria categoria = new Categoria();
+            categoria.setNome(rs.getString("categoria"));
+            produto.setCategoria(categoria);
+
+            lista.add(produto);
+        }
+
+    } catch (SQLException e) {
+        System.err.println("Erro ao listar produtos da categoria " + nomeCategoria + ": " + e.getMessage());
+    }
+
+    return lista;
+}
+    
+    public Produto buscarPorId(Integer idProduto) {
         String sql = "SELECT * FROM produto WHERE idProduto = ?";
 
         ConnectionFactory factory = new ConnectionFactory();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
-            stmt.setInt(1, idProduto);
+            if (idProduto != null) {
+                stmt.setInt(1, idProduto);
+            } else {
+                stmt.setNull(1, java.sql.Types.INTEGER);
+            }
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -276,28 +319,36 @@ public class ProdutoDAO {
         return lista;
     }
 
-    public void atualizarEstoque(int idProduto, int novaQuantidade) {
+    public void atualizarEstoque(Integer idProduto, int novaQuantidade) {
         String sql = "UPDATE produto SET quantidadeEstoque = ? WHERE idProduto = ?";
 
         ConnectionFactory factory = new ConnectionFactory();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setInt(1, novaQuantidade);
-            stmt.setInt(2, idProduto);
+            if (idProduto != null) {
+                stmt.setInt(2, idProduto);
+            } else {
+                stmt.setNull(2, java.sql.Types.INTEGER);
+            }
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Erro ao atualizar estoque: " + e.getMessage());
         }
     }
 
-    public void aplicarDesconto(int idProduto, double percentual) {
+    public void aplicarDesconto(Integer idProduto, double percentual) {
         String sql = "UPDATE produto SET precoUnitario = precoUnitario * ? WHERE idProduto = ?";
 
         ConnectionFactory factory = new ConnectionFactory();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setDouble(1, 1 - percentual);
-            stmt.setInt(2, idProduto);
+            if (idProduto != null) {
+                stmt.setInt(2, idProduto);
+            } else {
+                stmt.setNull(2, java.sql.Types.INTEGER);
+            }
             stmt.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Erro ao aplicar desconto: " + e.getMessage());

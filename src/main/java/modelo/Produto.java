@@ -6,7 +6,7 @@ public class Produto extends ItemEstoque implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private String unidade; // Kg, litros, etc.
-    private int idProduto; // ID dos produtos.
+    private Integer idProduto; // ID dos produtos.
     private Categoria categoria; // Se referindo a classe Categoria.
     private int quantidadeEstoque; 
     private int quantidadeMinima;
@@ -72,11 +72,11 @@ public class Produto extends ItemEstoque implements Serializable {
         this.quantidadeMaxima = quantidadeMaxima;
     }
 
-    public int getIdProduto() {
+    public Integer getIdProduto() {
         return idProduto;
     }
 
-    public void setIdProduto(int idProduto) {
+    public void setIdProduto(Integer idProduto) {
         this.idProduto = idProduto;
     }
 }
