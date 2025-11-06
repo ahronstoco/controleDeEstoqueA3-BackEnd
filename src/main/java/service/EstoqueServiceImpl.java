@@ -133,4 +133,4 @@ public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueSe
         }
         return total;
     }
-}f
+}
