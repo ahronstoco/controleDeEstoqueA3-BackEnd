@@ -12,13 +12,12 @@ import javax.swing.JOptionPane;
 
 public class MovimentacaoDAO {
 
-    // Método para registrar uma nova movimentação
     public void inserir(Movimentacao mov) {
-        Connection con = ConnectionFactory.getConnection();
+        Connection con = null;
         PreparedStatement stmt = null;
 
         try {
-            // Inserir a movimentação
+            con = new ConnectionFactory().getConnection();
             stmt = con.prepareStatement(
                     "INSERT INTO movimentacao (idProduto, tipo, quantidade, data, observacao) VALUES (?, ?, ?, ?, ?)"
             );
@@ -31,25 +30,34 @@ public class MovimentacaoDAO {
 
             stmt.executeUpdate();
 
-            // Atualiza o estoque do produto de acordo com o tipo da movimentação
             atualizarEstoque(mov);
 
-            JOptionPane.showMessageDialog(null, "Movimentação registrada com sucesso!");
+            JOptionPane.showMessageDialog(null, "Movimentação registrada.");
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao inserir movimentação: " + ex.getMessage());
         } finally {
-            ConnectionFactory.closeConnection(con, stmt);
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao fechar conexão: " + ex.getMessage());
+            }
         }
     }
 
     public List<Movimentacao> listar() {
-        Connection con = ConnectionFactory.getConnection();
+        Connection con = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Movimentacao> movimentacoes = new ArrayList<>();
 
         try {
+            con = new ConnectionFactory().getConnection();
             stmt = con.prepareStatement("SELECT * FROM movimentacao ORDER BY data DESC");
             rs = stmt.executeQuery();
 
@@ -68,20 +76,31 @@ public class MovimentacaoDAO {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao listar movimentações: " + ex.getMessage());
         } finally {
-            ConnectionFactory.closeConnection(con, stmt, rs);
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao fechar conexão: " + ex.getMessage());
+            }
         }
-
         return movimentacoes;
     }
 
-    // Método para buscar movimentações de um produto específico
     public List<Movimentacao> buscarPorProduto(int idProduto) {
-        Connection con = ConnectionFactory.getConnection();
+        Connection con = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Movimentacao> movimentacoes = new ArrayList<>();
 
         try {
+            con = new ConnectionFactory().getConnection();
             stmt = con.prepareStatement("SELECT * FROM movimentacao WHERE idProduto = ? ORDER BY data DESC");
             stmt.setInt(1, idProduto);
             rs = stmt.executeQuery();
@@ -101,27 +120,98 @@ public class MovimentacaoDAO {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao buscar movimentações: " + ex.getMessage());
         } finally {
-            ConnectionFactory.closeConnection(con, stmt, rs);
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao fechar conexão: " + ex.getMessage());
+            }
         }
 
         return movimentacoes;
     }
 
-    // Método para excluir uma movimentação (opcional)
     public void excluir(int idMovimentacao) {
-        Connection con = ConnectionFactory.getConnection();
+        Connection con = null;
         PreparedStatement stmt = null;
 
         try {
+            con = new ConnectionFactory().getConnection();
             stmt = con.prepareStatement("DELETE FROM movimentacao WHERE idMovimentacao = ?");
             stmt.setInt(1, idMovimentacao);
             stmt.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Movimentação excluída com sucesso!");
+            JOptionPane.showMessageDialog(null, "Movimentação excluída.");
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao excluir movimentação: " + ex.getMessage());
         } finally {
-            ConnectionFactory.closeConnection(con, stmt);
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao fechar conexão: " + ex.getMessage());
+            }
+        }
+    }
+
+    private void atualizarEstoque(Movimentacao mov) throws SQLException {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = new ConnectionFactory().getConnection();
+
+            // Busca o estoque atual do produto
+            stmt = con.prepareStatement("SELECT estoque FROM produto WHERE idProduto = ?");
+            stmt.setInt(1, mov.getIdProduto());
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int estoqueAtual = rs.getInt("estoque");
+                int novoEstoque;
+
+                // Define o novo valor de estoque
+                if (mov.getTipo().equalsIgnoreCase("entrada")) {
+                    novoEstoque = estoqueAtual + mov.getQuantidade();
+                } else if (mov.getTipo().equalsIgnoreCase("saida")) {
+                    novoEstoque = Math.max(estoqueAtual - mov.getQuantidade(), 0);
+                } else {
+                    throw new SQLException("Tipo de movimentação inválido: " + mov.getTipo());
+                }
+
+                // Atualiza o estoque no banco
+                stmt.close();
+                stmt = con.prepareStatement("UPDATE produto SET estoque = ? WHERE idProduto = ?");
+                stmt.setInt(1, novoEstoque);
+                stmt.setInt(2, mov.getIdProduto());
+                stmt.executeUpdate();
+
+            } else {
+                throw new SQLException("Produto com ID " + mov.getIdProduto() + " não encontrado!");
+            }
+
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
         }
     }
 }
