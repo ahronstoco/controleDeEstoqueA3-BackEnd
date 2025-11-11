@@ -8,7 +8,7 @@ public abstract class ItemEstoque implements Serializable {
     // Classe superior contendo somente preço e nome.
     
     private String nome; // Nome do produto.
-    private double precoUnitario;
+    private double precoUnitario; // Preço de uma quantidade de cada produto.
 
     public ItemEstoque() {
         this("",0.0);

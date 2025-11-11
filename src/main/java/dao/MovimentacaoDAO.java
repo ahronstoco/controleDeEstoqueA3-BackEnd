@@ -32,10 +32,10 @@ public class MovimentacaoDAO {
 
             atualizarEstoque(mov);
 
-            JOptionPane.showMessageDialog(null, "Movimentação registrada.");
+            JOptionPane.showMessageDialog(null, "Movimentacao registrada.");
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao inserir movimentação: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao inserir movimentacao: " + ex.getMessage());
         } finally {
             try {
                 if (stmt != null) {
@@ -45,7 +45,7 @@ public class MovimentacaoDAO {
                     con.close();
                 }
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao fechar conexão: " + ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao fechar conexao: " + ex.getMessage());
             }
         }
     }
@@ -74,7 +74,7 @@ public class MovimentacaoDAO {
             }
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao listar movimentações: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao listar movimentacoes: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -87,7 +87,7 @@ public class MovimentacaoDAO {
                     con.close();
                 }
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao fechar conexão: " + ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao fechar conexao: " + ex.getMessage());
             }
         }
         return movimentacoes;
@@ -118,7 +118,7 @@ public class MovimentacaoDAO {
             }
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao buscar movimentações: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao buscar movimentacoes: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -131,7 +131,7 @@ public class MovimentacaoDAO {
                     con.close();
                 }
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao fechar conexão: " + ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao fechar conexao: " + ex.getMessage());
             }
         }
 
@@ -147,10 +147,10 @@ public class MovimentacaoDAO {
             stmt = con.prepareStatement("DELETE FROM movimentacao WHERE idMovimentacao = ?");
             stmt.setInt(1, idMovimentacao);
             stmt.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Movimentação excluída.");
+            JOptionPane.showMessageDialog(null, "Movimentacao excluida.");
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao excluir movimentação: " + ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao excluir movimentacao: " + ex.getMessage());
         } finally {
             try {
                 if (stmt != null) {
@@ -160,7 +160,7 @@ public class MovimentacaoDAO {
                     con.close();
                 }
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao fechar conexão: " + ex.getMessage());
+                JOptionPane.showMessageDialog(null, "Erro ao fechar conexao: " + ex.getMessage());
             }
         }
     }
@@ -173,7 +173,6 @@ public class MovimentacaoDAO {
         try {
             con = new ConnectionFactory().getConnection();
 
-            // Busca o estoque atual do produto
             stmt = con.prepareStatement("SELECT estoque FROM produto WHERE idProduto = ?");
             stmt.setInt(1, mov.getIdProduto());
             rs = stmt.executeQuery();
@@ -182,16 +181,14 @@ public class MovimentacaoDAO {
                 int estoqueAtual = rs.getInt("estoque");
                 int novoEstoque;
 
-                // Define o novo valor de estoque
                 if (mov.getTipo().equalsIgnoreCase("entrada")) {
                     novoEstoque = estoqueAtual + mov.getQuantidade();
                 } else if (mov.getTipo().equalsIgnoreCase("saida")) {
                     novoEstoque = Math.max(estoqueAtual - mov.getQuantidade(), 0);
                 } else {
-                    throw new SQLException("Tipo de movimentação inválido: " + mov.getTipo());
+                    throw new SQLException("Tipo de movimentacao invalido: " + mov.getTipo());
                 }
 
-                // Atualiza o estoque no banco
                 stmt.close();
                 stmt = con.prepareStatement("UPDATE produto SET estoque = ? WHERE idProduto = ?");
                 stmt.setInt(1, novoEstoque);
@@ -199,7 +196,7 @@ public class MovimentacaoDAO {
                 stmt.executeUpdate();
 
             } else {
-                throw new SQLException("Produto com ID " + mov.getIdProduto() + " não encontrado!");
+                throw new SQLException("Produto com ID " + mov.getIdProduto() + " nao encontrado.");
             }
 
         } finally {

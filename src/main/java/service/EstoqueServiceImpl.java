@@ -20,7 +20,7 @@ public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueSe
         this.produtoDAO = new ProdutoDAO();
         this.categoriaDAO = new CategoriaDAO();
         this.movimentacaoDAO = new MovimentacaoDAO();
-        System.out.println("Serviço EstoqueServiceImpl instanciado com sucesso.");
+        System.out.println("Servico EstoqueServiceImpl instanciado com sucesso.");
     }
 
     @Override
@@ -98,7 +98,7 @@ public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueSe
         produtoDAO.atualizarEstoque(p.getIdProduto(), novaQtd);
         movimentacaoDAO.inserir(m);
 
-        System.out.println("Movimentação registrada: " + m.getTipo() + " de " + m.getQuantidade()
+        System.out.println("Movimentacao registrada: " + m.getTipo() + " de " + m.getQuantidade()
                 + " unid(s) do produto " + p.getNome());
     }
 

@@ -15,7 +15,7 @@ public class Server {
             Naming.rebind("rmi://localhost:1099/EstoqueService", service);
 
             System.out.println("Servidor RMI  ativo.");
-            System.out.println("Serviço disponível.");
+            System.out.println("Servico disponivel.");
 
         } catch (Exception e) {
             System.err.println("Erro ao iniciar o servidor RMI:");

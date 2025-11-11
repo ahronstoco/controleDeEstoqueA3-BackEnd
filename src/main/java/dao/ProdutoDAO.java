@@ -101,7 +101,7 @@ public class ProdutoDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("Erro ao listar os Produtos: " + e.getMessage());
+            System.err.println("Erro ao listar os produtos: " + e.getMessage());
         }
 
         return lista;
