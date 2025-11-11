@@ -9,7 +9,7 @@ import modelo.Categoria;
 import modelo.GerenciamentoEstoque;
 import java.util.ArrayList;
 import java.util.List;
-import util.ConnectionFactory;
+import util.Conexao;
 
 public class ProdutoDAO {
 
@@ -19,7 +19,7 @@ public class ProdutoDAO {
         String sql = "INSERT INTO produto (nome, precoUnitario, unidade, quantidadeEstoque, quantidadeMinima, "
                 + "quantidadeMaxima, categoria) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        ConnectionFactory factory = new ConnectionFactory();
+        Conexao factory = new Conexao();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setString(1, produto.getNome());
@@ -40,7 +40,7 @@ public class ProdutoDAO {
         String sql = "UPDATE produto SET nome = ?, precoUnitario = ?, unidade = ?, quantidadeEstoque = ?, quantidadeMinima = ?, "
                 + "quantidadeMaxima = ?, idProduto = ?, categoria = ? WHERE idProduto = ?";
 
-        ConnectionFactory factory = new ConnectionFactory();
+        Conexao factory = new Conexao();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setString(1, produto.getNome());
@@ -63,7 +63,7 @@ public class ProdutoDAO {
     public void apagar(Integer idProduto) {
         String sql = "DELETE FROM produto WHERE idProduto = ?";
 
-        ConnectionFactory factory = new ConnectionFactory();
+        Conexao factory = new Conexao();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             if (idProduto != null) {
@@ -82,7 +82,7 @@ public class ProdutoDAO {
         List<Produto> lista = new ArrayList<>();
         String sql = "SELECT * FROM produto";
 
-        ConnectionFactory factory = new ConnectionFactory();
+        Conexao factory = new Conexao();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
@@ -111,7 +111,7 @@ public class ProdutoDAO {
         List<Produto> listarPrecos = new ArrayList<>();
         String sql = "SELECT * FROM produto";
 
-        ConnectionFactory factory = new ConnectionFactory();
+        Conexao factory = new Conexao();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
@@ -136,7 +136,7 @@ public class ProdutoDAO {
         List<Produto> listaBalanco = new ArrayList<>();
         String sql = "SELECT nome, precoUnitario, quantidadeEstoque FROM produto ORDER BY nome";
 
-        ConnectionFactory factory = new ConnectionFactory();
+        Conexao factory = new Conexao();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
@@ -158,7 +158,7 @@ public class ProdutoDAO {
         List<Produto> listaFalta = new ArrayList<>();
         String sql = "SELECT nome, quantidadeMinima, quantidadeEstoque FROM produto WHERE quantidadeEstoque < quantidadeMinima";
 
-        ConnectionFactory factory = new ConnectionFactory();
+        Conexao factory = new Conexao();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
@@ -180,7 +180,7 @@ public class ProdutoDAO {
         List<Produto> listaExcesso = new ArrayList<>();
         String sql = "SELECT nome, quantidadeMaxima, quantidadeEstoque FROM produto WHERE quantidadeEstoque > quantidadeMaxima";
 
-        ConnectionFactory factory = new ConnectionFactory();
+        Conexao factory = new Conexao();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
@@ -202,7 +202,7 @@ public class ProdutoDAO {
         List<String[]> listaCategoria = new ArrayList<>();
         String sql = "SELECT categoria, COUNT(*) AS total FROM produto GROUP BY categoria";
 
-        ConnectionFactory factory = new ConnectionFactory();
+        Conexao factory = new Conexao();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
@@ -223,7 +223,7 @@ public class ProdutoDAO {
     List<Produto> lista = new ArrayList<>();
     String sql = "SELECT * FROM produto WHERE categoria = ?";
 
-    ConnectionFactory factory = new ConnectionFactory();
+    Conexao factory = new Conexao();
     try (Connection conexao = factory.getConnection();
          PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
@@ -257,7 +257,7 @@ public class ProdutoDAO {
     public Produto buscarPorId(Integer idProduto) {
         String sql = "SELECT * FROM produto WHERE idProduto = ?";
 
-        ConnectionFactory factory = new ConnectionFactory();
+        Conexao factory = new Conexao();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             if (idProduto != null) {
@@ -291,7 +291,7 @@ public class ProdutoDAO {
         List<Produto> lista = new ArrayList<>();
         String sql = "SELECT * FROM produto WHERE nome LIKE ?";
 
-        ConnectionFactory factory = new ConnectionFactory();
+        Conexao factory = new Conexao();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setString(1, "%" + nome + "%");
@@ -322,7 +322,7 @@ public class ProdutoDAO {
     public void atualizarEstoque(Integer idProduto, int novaQuantidade) {
         String sql = "UPDATE produto SET quantidadeEstoque = ? WHERE idProduto = ?";
 
-        ConnectionFactory factory = new ConnectionFactory();
+        Conexao factory = new Conexao();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setInt(1, novaQuantidade);
@@ -340,7 +340,7 @@ public class ProdutoDAO {
     public void aplicarDesconto(Integer idProduto, double percentual) {
         String sql = "UPDATE produto SET precoUnitario = precoUnitario * ? WHERE idProduto = ?";
 
-        ConnectionFactory factory = new ConnectionFactory();
+        Conexao factory = new Conexao();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setDouble(1, 1 - percentual);

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import modelo.Movimentacao;
-import util.ConnectionFactory;
+import util.Conexao;
 import javax.swing.JOptionPane;
 
 public class MovimentacaoDAO {
@@ -17,7 +17,7 @@ public class MovimentacaoDAO {
         PreparedStatement stmt = null;
 
         try {
-            con = new ConnectionFactory().getConnection();
+            con = new Conexao().getConnection();
             stmt = con.prepareStatement(
                     "INSERT INTO movimentacao (idProduto, tipo, quantidade, data, observacao) VALUES (?, ?, ?, ?, ?)"
             );
@@ -57,7 +57,7 @@ public class MovimentacaoDAO {
         List<Movimentacao> movimentacoes = new ArrayList<>();
 
         try {
-            con = new ConnectionFactory().getConnection();
+            con = new Conexao().getConnection();
             stmt = con.prepareStatement("SELECT * FROM movimentacao ORDER BY data DESC");
             rs = stmt.executeQuery();
 
@@ -100,7 +100,7 @@ public class MovimentacaoDAO {
         List<Movimentacao> movimentacoes = new ArrayList<>();
 
         try {
-            con = new ConnectionFactory().getConnection();
+            con = new Conexao().getConnection();
             stmt = con.prepareStatement("SELECT * FROM movimentacao WHERE idProduto = ? ORDER BY data DESC");
             stmt.setInt(1, idProduto);
             rs = stmt.executeQuery();
@@ -143,7 +143,7 @@ public class MovimentacaoDAO {
         PreparedStatement stmt = null;
 
         try {
-            con = new ConnectionFactory().getConnection();
+            con = new Conexao().getConnection();
             stmt = con.prepareStatement("DELETE FROM movimentacao WHERE idMovimentacao = ?");
             stmt.setInt(1, idMovimentacao);
             stmt.executeUpdate();
@@ -171,7 +171,7 @@ public class MovimentacaoDAO {
         ResultSet rs = null;
 
         try {
-            con = new ConnectionFactory().getConnection();
+            con = new Conexao().getConnection();
 
             stmt = con.prepareStatement("SELECT estoque FROM produto WHERE idProduto = ?");
             stmt.setInt(1, mov.getIdProduto());

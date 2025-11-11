@@ -9,14 +9,14 @@ import modelo.Categoria;
 import modelo.Tamanho;
 import java.util.ArrayList;
 import java.util.List;
-import util.ConnectionFactory;
+import util.Conexao;
 
 public class CategoriaDAO {
 
     public void inserir(Categoria categoria) {
         String sql = "INSERT INTO categoria(nome, tamanho, embalagem) VALUES (?, ?, ?)";
 
-        ConnectionFactory factory = new ConnectionFactory();
+        Conexao factory = new Conexao();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, categoria.getNome());
@@ -40,7 +40,7 @@ public class CategoriaDAO {
     public void alterar(Categoria categoria) {
         String sql = "UPDATE categoria SET nome = ?, tamanho = ?, embalagem = ? WHERE idCategoria = ?";
 
-        ConnectionFactory factory = new ConnectionFactory();
+        Conexao factory = new Conexao();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setString(1, categoria.getNome());
@@ -57,7 +57,7 @@ public class CategoriaDAO {
     public void apagar(int idCategoria) {
         String sql = "DELETE FROM categoria WHERE idCategoria = ?";
 
-        ConnectionFactory factory = new ConnectionFactory();
+        Conexao factory = new Conexao();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setInt(1, idCategoria);
@@ -72,7 +72,7 @@ public class CategoriaDAO {
         List<Categoria> lista = new ArrayList<>();
         String sql = "SELECT * FROM categoria";
 
-        ConnectionFactory factory = new ConnectionFactory();
+        Conexao factory = new Conexao();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
@@ -94,7 +94,7 @@ public class CategoriaDAO {
     public Categoria buscarPorId(int idCategoria) {
         String sql = "SELECT * FROM categoria WHERE idCategoria = ?";
 
-        ConnectionFactory factory = new ConnectionFactory();
+        Conexao factory = new Conexao();
         try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setInt(1, idCategoria);

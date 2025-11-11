@@ -1,4 +1,4 @@
-package Service;
+package servico;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -9,13 +9,13 @@ import dao.CategoriaDAO;
 import dao.MovimentacaoDAO;
 import modelo.*;
 
-public class EstoqueServiceImpl extends UnicastRemoteObject implements EstoqueService {
+public class ServicoEstoqueImpl extends UnicastRemoteObject implements ServicoEstoque {
 
     private final ProdutoDAO produtoDAO;
     private final CategoriaDAO categoriaDAO;
     private final MovimentacaoDAO movimentacaoDAO;
 
-    public EstoqueServiceImpl() throws RemoteException {
+    public ServicoEstoqueImpl() throws RemoteException {
         super();
         this.produtoDAO = new ProdutoDAO();
         this.categoriaDAO = new CategoriaDAO();

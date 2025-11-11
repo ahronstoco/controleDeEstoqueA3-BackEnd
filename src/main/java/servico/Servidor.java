@@ -1,9 +1,9 @@
-package Service;
+package servico;
 
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 
-public class Server {
+public class Servidor {
 
     public static void main(String[] args) {
         try {
@@ -11,7 +11,7 @@ public class Server {
             LocateRegistry.createRegistry(1099);
             System.out.println("Registro RMI criado na porta 1099.");
 
-            EstoqueServiceImpl service = new EstoqueServiceImpl();
+            ServicoEstoqueImpl service = new ServicoEstoqueImpl();
             Naming.rebind("rmi://localhost:1099/EstoqueService", service);
 
             System.out.println("Servidor RMI  ativo.");

@@ -1,4 +1,4 @@
-package Service;
+package servico;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -7,7 +7,7 @@ import modelo.Produto;
 import modelo.Categoria;
 import modelo.Movimentacao;
 
-public interface EstoqueService extends Remote {
+public interface ServicoEstoque extends Remote {
 
     void salvarProduto(Produto p) throws RemoteException;
 

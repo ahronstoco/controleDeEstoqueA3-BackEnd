@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ConnectionFactory {
+public class Conexao {
 
     private static final String URL = "jdbc:mysql://127.0.0.1:3306/ControleEstoqueA3";
     private static final String USUARIO = "a3prog";
