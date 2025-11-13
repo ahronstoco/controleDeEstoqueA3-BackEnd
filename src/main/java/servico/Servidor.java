@@ -11,11 +11,16 @@ public class Servidor {
             LocateRegistry.createRegistry(1099);
             System.out.println("Registro RMI criado na porta 1099.");
 
-            ServicoEstoqueImpl service = new ServicoEstoqueImpl();
-            Naming.rebind("rmi://localhost:1099/EstoqueService", service);
+            ServicoProdutoImpl servicoProduto = new ServicoProdutoImpl();
+            ServicoCategoriaImpl servicoCategoria = new ServicoCategoriaImpl();
+            ServicoMovimentacaoImpl servicoMovimentacao = new ServicoMovimentacaoImpl();
+
+            Naming.rebind("rmi://localhost:1099/ProdutoService", servicoProduto);
+            Naming.rebind("rmi://localhost:1099/CategoriaService", servicoCategoria);
+            Naming.rebind("rmi://localhost:1099/MovimentacaoService", servicoMovimentacao);
 
             System.out.println("Servidor RMI  ativo.");
-            System.out.println("Servico disponivel.");
+            System.out.println("Servicos disponiveis.");
 
         } catch (Exception e) {
             System.err.println("Erro ao iniciar o servidor RMI:");
