@@ -7,8 +7,7 @@ import modelo.Movimentacao;
 
 public interface ServicoMovimentacao extends Remote {
 
-    void registrarMovimentacao(Movimentacao m) throws RemoteException;
+    void registrarMovimentacao(int idProduto, String tipo, int quantidade, String observacao) throws RemoteException;
 
-    List<Movimentacao> listarMovimentacoesPorProduto(int idProduto) throws RemoteException;
+    List<Movimentacao> listarTodasMovimentacoes() throws RemoteException;
 }
-

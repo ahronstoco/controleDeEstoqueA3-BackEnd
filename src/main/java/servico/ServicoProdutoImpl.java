@@ -67,4 +67,45 @@ public class ServicoProdutoImpl extends UnicastRemoteObject implements ServicoPr
         }
         return total;
     }
+
+    @Override
+    public List<Produto> listarPrecos() throws RemoteException {
+        return produtoDAO.listarPrecos();
+    }
+
+    @Override
+    public List<Produto> listarBalanco() throws RemoteException {
+        return produtoDAO.listarBalanco();
+    }
+
+    @Override
+    public List<Produto> listarFaltaProduto() throws RemoteException {
+        return produtoDAO.listarFaltaProduto();
+    }
+
+    @Override
+    public List<Produto> listarExcessoProdutos() throws RemoteException {
+        return produtoDAO.listarExcessoProdutos();
+    }
+
+    @Override
+    public List<String[]> listarProdutosPorCategoria() throws RemoteException {
+        return produtoDAO.listarPorCategoria();
+    }
+
+    @Override
+    public void aplicarDesconto(Integer idProduto, double percentual) throws RemoteException {
+        produtoDAO.aplicarDesconto(idProduto, percentual);
+    }
+
+    @Override
+    public void atualizarEstoque(Integer idProduto, int novaQuantidade) throws RemoteException {
+        produtoDAO.atualizarEstoque(idProduto, novaQuantidade);
+    }
+
+    @Override
+    public List<Produto> buscarProdutoPorNome(String nome) throws RemoteException {
+        return produtoDAO.buscarPorNome(nome);
+    }
 }
+

@@ -21,30 +21,17 @@ public class ServicoMovimentacaoImpl extends UnicastRemoteObject implements Serv
     }
 
     @Override
-    public void registrarMovimentacao(Movimentacao m) throws RemoteException {
-        Produto p = produtoDAO.buscarPorId(m.getIdProduto());
-        if (p == null) {
-            throw new RemoteException("Produto não encontrado (ID: " + m.getIdProduto() + ")");
+    public void registrarMovimentacao(int idProduto, String tipo, int quantidade, String observacao) throws RemoteException {
+        try {
+            MovimentacaoDAO dao = new MovimentacaoDAO();
+            dao.inserirMovimentacao(idProduto, tipo, quantidade, observacao);
+        } catch (Exception e) {
+            throw new RemoteException("Erro ao registrar movimentação", e);
         }
-
-        int novaQtd = p.getQuantidadeEstoque();
-
-        if (m.getTipo().equalsIgnoreCase("ENTRADA")) {
-            novaQtd += m.getQuantidade();
-        } else if (m.getTipo().equalsIgnoreCase("SAIDA")) {
-            novaQtd -= m.getQuantidade();
-            if (novaQtd < 0) novaQtd = 0;
-        }
-
-        produtoDAO.atualizarEstoque(p.getIdProduto(), novaQtd);
-        movimentacaoDAO.inserir(m);
-
-        System.out.println("Movimentação registrada: " + m.getTipo() + " de " + m.getQuantidade()
-                + " unid(s) do produto " + p.getNome());
     }
 
     @Override
-    public List<Movimentacao> listarMovimentacoesPorProduto(int idProduto) throws RemoteException {
-        return movimentacaoDAO.buscarPorProduto(idProduto);
+    public List<Movimentacao> listarTodasMovimentacoes() throws RemoteException {
+        return movimentacaoDAO.listar();
     }
 }

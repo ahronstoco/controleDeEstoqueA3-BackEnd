@@ -1,9 +1,12 @@
-package servico;
+package principal;
 
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
+import servico.ServicoCategoriaImpl;
+import servico.ServicoMovimentacaoImpl;
+import servico.ServicoProdutoImpl;
 
-public class Servidor {
+public class Principal {
 
     public static void main(String[] args) {
         try {

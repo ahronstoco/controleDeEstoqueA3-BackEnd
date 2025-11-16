@@ -12,30 +12,27 @@ import javax.swing.JOptionPane;
 
 public class MovimentacaoDAO {
 
-    public void inserir(Movimentacao mov) {
+    public void inserirMovimentacao(int idProduto, String tipo, int quantidade, String observacao) throws SQLException {
         Connection con = null;
         PreparedStatement stmt = null;
 
         try {
             con = new Conexao().getConnection();
             stmt = con.prepareStatement(
-                    "INSERT INTO movimentacao (idProduto, tipo, quantidade, data, observacao) VALUES (?, ?, ?, ?, ?)"
+                    "INSERT INTO movimentacao (idProduto, tipo, quantidade, data, observacao) VALUES (?, ?, ?, CURDATE(), ?)"
             );
 
-            stmt.setInt(1, mov.getIdProduto());
-            stmt.setString(2, mov.getTipo());
-            stmt.setInt(3, mov.getQuantidade());
-            stmt.setDate(4, new java.sql.Date(mov.getData().getTime()));
-            stmt.setString(5, mov.getObservacao());
+            stmt.setInt(1, idProduto);
+            stmt.setString(2, tipo);
+            stmt.setInt(3, quantidade);
+            stmt.setString(4, observacao);
 
             stmt.executeUpdate();
 
-            atualizarEstoque(mov);
-
-            JOptionPane.showMessageDialog(null, "Movimentacao registrada.");
+            System.out.println("Movimentacao registrada.");
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao inserir movimentacao: " + ex.getMessage());
+            System.err.println("Erro ao inserir movimentacao: " + ex.getMessage());
         } finally {
             try {
                 if (stmt != null) {
@@ -45,7 +42,7 @@ public class MovimentacaoDAO {
                     con.close();
                 }
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao fechar conexao: " + ex.getMessage());
+                System.err.println("Erro ao fechar conexao: " + ex.getMessage());
             }
         }
     }
