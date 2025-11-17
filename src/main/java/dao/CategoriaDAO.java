@@ -20,7 +20,7 @@ import util.Conexao;
 // Exclusão pelo ID;
 // Listagem completa das categorias;
 // Busca de uma categoria específica pelo ID.
-// É utilizada a classe Tamanho} para conversão segura do campo ENUM armazenado no banco de dados.
+// É utilizada a classe Tamanho para conversão segura do campo ENUM armazenado no banco de dados.
 public class CategoriaDAO {
 
     // Insere uma nova categoria no banco de dados. 

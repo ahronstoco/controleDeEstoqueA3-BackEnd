@@ -7,12 +7,12 @@ import servico.ServicoMovimentacaoImpl;
 import servico.ServicoProdutoImpl;
 
 // Classe principal responsável por iniciar o servidor RMI da aplicação.
-// Este componente representa o ponto de entrada do backend. Ele executa as seguintes operações essenciais:
+// Este componente representa o ponto de entrada do back-end. Ele executa as seguintes operações essenciais:
 // Inicializa o registro RMI na porta 1099;
 // Instancia as implementações dos serviços remotos (Produto, Categoria e Movimentação;
 // Realiza o binding dessas instâncias no registro, tornando-as acessíveis ao cliente;
 // Exibe mensagens de status no console para auxiliar no monitoramento e depuração.
-// Após sua execução bem-sucedida, o backend estará apto a receber chamadas remotas provenientes do front-end através dos serviços.
+// Após sua execução bem-sucedida, o back-end estará apto a receber chamadas remotas provenientes do front-end através dos serviços.
 public class Principal {
 
 // Método principal responsável por inicializar o servidor RMI.

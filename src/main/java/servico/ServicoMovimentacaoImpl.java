@@ -8,9 +8,9 @@ import dao.ProdutoDAO;
 import modelo.Movimentacao;
 import modelo.Produto;
 
-// Implementação da interface ServicoMovimentacao}, responsável por disponibilizar via
+// Implementação da interface ServicoMovimentacao, responsável por disponibilizar via
 // RMI os serviços de registro e consulta de movimentações de estoque.
-// Esta classe representa a camada de serviço do backend e funciona como intermediária entre
+// Esta classe representa a camada de serviço do back-end e funciona como intermediária entre
 //o cliente RMI e a camada de persistência MovimentacaoDAO e ProdutoDAO.
 // A classe permite registrar entradas e saídas de produtos e consultar
 //todas as movimentações realizadas no sistema.

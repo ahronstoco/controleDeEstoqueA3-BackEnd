@@ -8,7 +8,7 @@ import modelo.Categoria;
 // Interface remota responsável pela definição dos serviços relacionados à entidade Categoria que podem ser acessados via RMI.
 // Esta interface é utilizada pelo cliente para invocar operações no servidor,
 //permitindo comunicação distribuída seguindo o padrão de tecnologia RMI (Remote Method Invocation).
-// Todos os métodos lançam RemoteException}, pois operações remotas podem falhar devido a problemas..
+// Todos os métodos lançam RemoteException, pois operações remotas podem falhar devido a problemas.
 public interface ServicoCategoria extends Remote {
 
     // Salva uma nova categoria.

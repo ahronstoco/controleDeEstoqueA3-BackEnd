@@ -5,7 +5,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 import modelo.Movimentacao;
 
-// Interface remota responsável pelos serviços relacionados à entidade Movimentacao},
+// Interface remota responsável pelos serviços relacionados à entidade Movimentacao,
 //permitindo registrar e consultar movimentações de estoque via RMI.
 // Esta interface define operações que o cliente pode invocar de forma distribuída para
 //realizar entradas, saídas e consultas de movimentações registradas no servidor.

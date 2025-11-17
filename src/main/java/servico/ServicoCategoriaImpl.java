@@ -8,9 +8,9 @@ import modelo.Categoria;
 
 // Implementação da interface ServicoCategoria, responsável por disponibilizar
 //serviços remotos para manipulação de categorias utilizando Java RMI.
-// Esta classe atua como a camada de serviço do backend, servindo de ponte
+// Esta classe atua como a camada de serviço do back-end, servindo de ponte
 //entre o cliente e a camada de persistência CategoriaDAO.
-// Todas as operações CRUD relacionadas à entidade Categoria} são expostas como métodos remotos.
+// Todas as operações CRUD relacionadas à entidade Categoria são expostas como métodos remotos.
 // Por estender UnicastRemoteObject, esta classe pode ser registrada no RMI Registry e acessada remotamente pelos clientes.
 public class ServicoCategoriaImpl extends UnicastRemoteObject implements ServicoCategoria {
 
