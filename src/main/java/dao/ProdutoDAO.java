@@ -11,10 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 import util.Conexao;
 
+// Classe responsável pelo gerenciamento de operações relacionadas aos produtos na base de dados.
+// A classe utiliza a infraestrutura fornecida por Conexao} para obter conexões JDBC.
+// Também fornece métodos auxiliares utilizados nos relatórios e no gerenciamento de estoque do sistema.
 public class ProdutoDAO {
 
+    // Instância auxiliar para uso interno em operações específicas.
     GerenciamentoEstoque se = new GerenciamentoEstoque();
 
+    // Insere um novo produto no banco de dados.
     public void inserir(Produto produto) {
         String sql = "INSERT INTO produto (nome, precoUnitario, unidade, quantidadeEstoque, quantidadeMinima, "
                 + "quantidadeMaxima, categoria) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -36,6 +41,7 @@ public class ProdutoDAO {
         }
     }
 
+    // Atualiza os dados de um produto existente no banco.
     public void alterar(Produto produto) {
         String sql = "UPDATE produto SET nome = ?, precoUnitario = ?, unidade = ?, quantidadeEstoque = ?, quantidadeMinima = ?, "
                 + "quantidadeMaxima = ?, idProduto = ?, categoria = ? WHERE idProduto = ?";
@@ -60,6 +66,7 @@ public class ProdutoDAO {
         }
     }
 
+    // Remove um produto do banco de dados com base no ID informado.
     public void apagar(Integer idProduto) {
         String sql = "DELETE FROM produto WHERE idProduto = ?";
 
@@ -78,6 +85,7 @@ public class ProdutoDAO {
         }
     }
 
+    // Retorna uma lista contendo todos os produtos cadastrados.
     public List<Produto> listar() {
         List<Produto> lista = new ArrayList<>();
         String sql = "SELECT * FROM produto";
@@ -107,6 +115,8 @@ public class ProdutoDAO {
         return lista;
     }
 
+    // Lista produtos contendo apenas nome, preço e unidade.
+    // Utilizado especialmente para geração de relatório de preços.
     public List<Produto> listarPrecos() {
         List<Produto> listarPrecos = new ArrayList<>();
         String sql = "SELECT * FROM produto";
@@ -132,6 +142,7 @@ public class ProdutoDAO {
         return listarPrecos;
     }
 
+    // Lista produtos com foco em balanço físico-financeiro.
     public List<Produto> listarBalanco() {
         List<Produto> listaBalanco = new ArrayList<>();
         String sql = "SELECT nome, precoUnitario, quantidadeEstoque FROM produto ORDER BY nome";
@@ -148,12 +159,13 @@ public class ProdutoDAO {
             }
 
         } catch (SQLException e) {
-            System.err.println("Erro ao listar balanço dos produtos: " + e.getMessage());
+            System.err.println("Erro ao listar balanco dos produtos: " + e.getMessage());
         }
 
         return listaBalanco;
     }
 
+    // Lista produtos cujo estoque está abaixo da quantidade mínima.
     public List<Produto> listarFaltaProduto() {
         List<Produto> listaFalta = new ArrayList<>();
         String sql = "SELECT nome, quantidadeMinima, quantidadeEstoque FROM produto WHERE quantidadeEstoque < quantidadeMinima";
@@ -176,6 +188,7 @@ public class ProdutoDAO {
         return listaFalta;
     }
 
+    // Lista produtos cujo estoque excede a quantidade máxima permitida.
     public List<Produto> listarExcessoProdutos() {
         List<Produto> listaExcesso = new ArrayList<>();
         String sql = "SELECT nome, quantidadeMaxima, quantidadeEstoque FROM produto WHERE quantidadeEstoque > quantidadeMaxima";
@@ -198,6 +211,7 @@ public class ProdutoDAO {
         return listaExcesso;
     }
 
+    // Retorna uma lista com pares categoria e total de produtos.
     public List<String[]> listarPorCategoria() {
         List<String[]> listaCategoria = new ArrayList<>();
         String sql = "SELECT categoria, COUNT(*) AS total FROM produto GROUP BY categoria";
@@ -219,41 +233,42 @@ public class ProdutoDAO {
         return listaCategoria;
     }
 
+    // Lista todos os produtos pertencentes a uma categoria específica.
     public List<Produto> listarPorCategoria(String nomeCategoria) {
-    List<Produto> lista = new ArrayList<>();
-    String sql = "SELECT * FROM produto WHERE categoria = ?";
+        List<Produto> lista = new ArrayList<>();
+        String sql = "SELECT * FROM produto WHERE categoria = ?";
 
-    Conexao factory = new Conexao();
-    try (Connection conexao = factory.getConnection();
-         PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        Conexao factory = new Conexao();
+        try (Connection conexao = factory.getConnection(); PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
-        stmt.setString(1, nomeCategoria);
-        ResultSet rs = stmt.executeQuery();
+            stmt.setString(1, nomeCategoria);
+            ResultSet rs = stmt.executeQuery();
 
-        while (rs.next()) {
-            Produto produto = new Produto();
-            produto.setIdProduto(rs.getInt("idProduto"));
-            produto.setNome(rs.getString("nome"));
-            produto.setPrecoUnitario(rs.getDouble("precoUnitario"));
-            produto.setUnidade(rs.getString("unidade"));
-            produto.setQuantidadeEstoque(rs.getInt("quantidadeEstoque"));
-            produto.setQuantidadeMinima(rs.getInt("quantidadeMinima"));
-            produto.setQuantidadeMaxima(rs.getInt("quantidadeMaxima"));
-            
-            Categoria categoria = new Categoria();
-            categoria.setNome(rs.getString("categoria"));
-            produto.setCategoria(categoria);
+            while (rs.next()) {
+                Produto produto = new Produto();
+                produto.setIdProduto(rs.getInt("idProduto"));
+                produto.setNome(rs.getString("nome"));
+                produto.setPrecoUnitario(rs.getDouble("precoUnitario"));
+                produto.setUnidade(rs.getString("unidade"));
+                produto.setQuantidadeEstoque(rs.getInt("quantidadeEstoque"));
+                produto.setQuantidadeMinima(rs.getInt("quantidadeMinima"));
+                produto.setQuantidadeMaxima(rs.getInt("quantidadeMaxima"));
 
-            lista.add(produto);
+                Categoria categoria = new Categoria();
+                categoria.setNome(rs.getString("categoria"));
+                produto.setCategoria(categoria);
+
+                lista.add(produto);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao listar produtos da categoria " + nomeCategoria + ": " + e.getMessage());
         }
 
-    } catch (SQLException e) {
-        System.err.println("Erro ao listar produtos da categoria " + nomeCategoria + ": " + e.getMessage());
+        return lista;
     }
 
-    return lista;
-}
-    
+    // Busca um produto pelo ID.
     public Produto buscarPorId(Integer idProduto) {
         String sql = "SELECT * FROM produto WHERE idProduto = ?";
 
@@ -287,6 +302,7 @@ public class ProdutoDAO {
         return null;
     }
 
+    // Busca produtos cujo nome contém o texto informado.
     public List<Produto> buscarPorNome(String nome) {
         List<Produto> lista = new ArrayList<>();
         String sql = "SELECT * FROM produto WHERE nome LIKE ?";
@@ -319,6 +335,7 @@ public class ProdutoDAO {
         return lista;
     }
 
+    // Atualiza a quantidade em estoque de um produto.
     public void atualizarEstoque(Integer idProduto, int novaQuantidade) {
         String sql = "UPDATE produto SET quantidadeEstoque = ? WHERE idProduto = ?";
 
@@ -337,6 +354,8 @@ public class ProdutoDAO {
         }
     }
 
+    // Aplica desconto no preço de um produto.
+    // O novo preço é calculado multiplicando o valor atual pelo fator (1 - percentual).
     public void aplicarDesconto(Integer idProduto, double percentual) {
         String sql = "UPDATE produto SET precoUnitario = precoUnitario * ? WHERE idProduto = ?";
 

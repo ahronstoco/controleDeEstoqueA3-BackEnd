@@ -11,8 +11,20 @@ import java.util.ArrayList;
 import java.util.List;
 import util.Conexao;
 
+// Classe responsável pelo acesso e manipulação dos dados da tabela categoria no banco MySQL.
+// A CategoriaDAO implementa as operações CRUD utilizando JDBC.
+// Cada método estabelece sua própria conexão através da classe Conexao,
+//onde executa o comando SQL necessário e trata as exceções relacionadas a banco de dados.
+// As operações realizadas incluem:
+// Inserção de novas categorias;
+// Exclusão pelo ID;
+// Listagem completa das categorias;
+// Busca de uma categoria específica pelo ID.
+// É utilizada a classe Tamanho} para conversão segura do campo ENUM armazenado no banco de dados.
 public class CategoriaDAO {
 
+    // Insere uma nova categoria no banco de dados. 
+    // Após a inserção, o ID gerado automaticamente é atribuído ao objeto Categoria recebido como parâmetro.
     public void inserir(Categoria categoria) {
         String sql = "INSERT INTO categoria(nome, tamanho, embalagem) VALUES (?, ?, ?)";
 
@@ -37,6 +49,7 @@ public class CategoriaDAO {
         }
     }
 
+    // Atualiza os dados de uma categoria existente.
     public void alterar(Categoria categoria) {
         String sql = "UPDATE categoria SET nome = ?, tamanho = ?, embalagem = ? WHERE idCategoria = ?";
 
@@ -54,6 +67,7 @@ public class CategoriaDAO {
         }
     }
 
+    // Remove uma categoria do banco de dados com base no seu ID.
     public void apagar(int idCategoria) {
         String sql = "DELETE FROM categoria WHERE idCategoria = ?";
 
@@ -68,6 +82,7 @@ public class CategoriaDAO {
         }
     }
 
+    // Lista todas as categorias cadastradas no banco de dados.
     public List<Categoria> listar() {
         List<Categoria> lista = new ArrayList<>();
         String sql = "SELECT * FROM categoria";
@@ -91,6 +106,7 @@ public class CategoriaDAO {
         return lista;
     }
 
+    // Busca uma categoria específica pelo ID.
     public Categoria buscarPorId(int idCategoria) {
         String sql = "SELECT * FROM categoria WHERE idCategoria = ?";
 

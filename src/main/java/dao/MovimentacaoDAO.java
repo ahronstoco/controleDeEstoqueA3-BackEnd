@@ -10,8 +10,17 @@ import modelo.Movimentacao;
 import util.Conexao;
 import javax.swing.JOptionPane;
 
+// Classe responsável pela manipulação dos dados da tabela movimentacao no banco de dados.
+// A MovimentacaoDAO executa operações de inserção, listagem, exclusão e consulta filtrada por produto.
+// Cada operação utiliza conexões fornecidas pela classe Conexao.
+// Uma movimentação representa uma alteração ocorrida no estoque, podendo ser de entrada ou saída,
+//contendo data, quantidade e observação.
+// A classe também possui um método privado atualizarEstoque, responsável por recalcular o
+//estoque do produto após uma movimentação.
 public class MovimentacaoDAO {
 
+    // Insere uma nova movimentação na tabela movimentacao.
+    // A data da movimentação é definida automaticamente pelo MySQL através da função CURDATE().
     public void inserirMovimentacao(int idProduto, String tipo, int quantidade, String observacao) throws SQLException {
         Connection con = null;
         PreparedStatement stmt = null;
@@ -47,6 +56,7 @@ public class MovimentacaoDAO {
         }
     }
 
+    // Lista todas as movimentações cadastradas no banco de dados.
     public List<Movimentacao> listar() {
         Connection con = null;
         PreparedStatement stmt = null;
@@ -90,6 +100,7 @@ public class MovimentacaoDAO {
         return movimentacoes;
     }
 
+    // Busca todas as movimentações associadas a um produto específico.
     public List<Movimentacao> buscarPorProduto(int idProduto) {
         Connection con = null;
         PreparedStatement stmt = null;
@@ -135,6 +146,7 @@ public class MovimentacaoDAO {
         return movimentacoes;
     }
 
+    // Exclui uma movimentação da tabela movimentacao.
     public void excluir(int idMovimentacao) {
         Connection con = null;
         PreparedStatement stmt = null;
@@ -162,6 +174,9 @@ public class MovimentacaoDAO {
         }
     }
 
+    // Atualiza o estoque de um produto com base em uma movimentação.
+    // Se a movimentação for do tipo entrada, o estoque aumenta.
+    // Se for do tipo saída, o estoque diminui, sem permitir valores negativos.
     private void atualizarEstoque(Movimentacao mov) throws SQLException {
         Connection con = null;
         PreparedStatement stmt = null;

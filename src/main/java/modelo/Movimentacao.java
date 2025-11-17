@@ -3,20 +3,28 @@ package modelo;
 import java.io.Serializable;
 import java.util.Date;
 
+// Classe que representa uma movimentação de estoque.
+// Uma movimentação corresponde a qualquer alteração realizada na quantidade de um produto no estoque,
+//seja por entrada, saída ou ajustes.
+// Cada registro contém informações completas como tipo da operação, quantidade movimentada, data e uma observação.
+// A classe implementa Serializable para permitir sua transmissão por RMI e armazenamento persistente quando necessário.
 public class Movimentacao implements Serializable {
-    private static final long serialVersionUID = 1L;
 
-    private int idMovimentacao;
-    private int idProduto;
-    private String tipo;
-    private int quantidade;
-    private Date data;
-    private String observacao;
+    private static final long serialVersionUID = 1L; // Versão da classe para controle de serialização.
 
+    private int idMovimentacao; // Identificador único da movimentação.
+    private int idProduto; // Identificador do produto relacionado à movimentação.
+    private String tipo; // Tipo da movimentação, valores esperados: entrada ou saída.
+    private int quantidade; // Quantidade movimentada.
+    private Date data; // Data da movimentação.
+    private String observacao; // Observação adicional sobre a movimentação.
+
+    // Construtor padrão que inicializa a movimentação com valores default.
     public Movimentacao() {
         this(0, 0, "", 0, new Date(), "");
     }
 
+    // Construtor completo da classe.
     public Movimentacao(int idMovimentacao, int idProduto, String tipo, int quantidade, Date data, String observacao) {
         this.idMovimentacao = idMovimentacao;
         this.idProduto = idProduto;
