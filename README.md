@@ -2,7 +2,9 @@
 **Disciplina: Sistemas Distribuídos e Mobile – A3**
 
 Este repositório contém a camada **back-end** do sistema de controle de estoque.
+
 **Link para o front-end:** https://github.com/ahronstoco/controleDeEstoqueA3-FrontEnd
+- [`Documentação do projeto`]( Controle%20de%20Estoque%20A3%20-%20Sistemas%20Distribuídos.pdf)
 
 ---
 
@@ -75,7 +77,7 @@ Para executar o sistema corretamente, utilize as seguintes credenciais de acesso
 Antes de iniciar o sistema, é necessário criar o banco de dados.  
 O script SQL para criação da base de dados e tabelas está disponível neste repositório:
 
-📄 [`ControleEstoqueA3.sql`](ControleEstoqueA3.sql)
+📄 [`Script do MySQL`](ControleEstoqueA3.sql)
 
 ---
 
